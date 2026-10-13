@@ -77,6 +77,7 @@ const JOBS_FILE = path.join(DATA, 'jobs.json');
 const SHEET_FILE = path.join(DATA, 'jobmarket.json');
 const VOCAB_FILE = path.join(DATA, 'vocab.json');
 const DIRECTORY_FILE = path.join(DATA, 'universities.json');
+export const NO_FIREBASE = 'no Firebase credentials in this environment';
 
 const argv = process.argv.slice(2);
 const has = (f) => argv.includes(f);
@@ -307,6 +308,10 @@ async function fetchPage(u) {
   return got.ok ? { ok: true, html: got.bytes.toString('utf8') } : { ok: false, error: got.error };
 }
 
+export function queueFailureIsNoop(error) {
+  return error === NO_FIREBASE;
+}
+
 async function loadQueue() {
   let db;
   try {
@@ -314,7 +319,7 @@ async function loadQueue() {
   } catch (e) {
     return { ok: false, db: null, docs: [], error: e.message };
   }
-  if (!db) return { ok: false, db: null, docs: [], error: 'no Firebase credentials in this environment' };
+  if (!db) return { ok: false, db: null, docs: [], error: NO_FIREBASE };
   try {
     const [snap, submissions] = await Promise.all([
       db.collection(REVIEW_COL).get(), db.collection('jobSubmissions').get(),
@@ -421,7 +426,7 @@ async function main() {
   if (!queue.ok) {
     warn(`the review queue is unreachable (${queue.error}) — nothing can be queued this run.`);
     /* --scan still says what WOULD be new against the served files alone */
-    if (!SCAN) return 1;
+    if (!SCAN) return queueFailureIsNoop(queue.error) ? 0 : 1;
   }
 
   const existingRows = [...(Array.isArray(site) ? site : []), ...(Array.isArray(sheet) ? sheet : []), ...(queue.submissionRows || [])];
