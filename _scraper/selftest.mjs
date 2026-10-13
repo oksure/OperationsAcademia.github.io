@@ -26174,6 +26174,10 @@ async function testPomsCrawler() {
   ok(/if \(!page\.ok\) \{[\s\S]{0,400}return 1;/.test(cli) && /no posting table was found[\s\S]{0,200}return 1;/.test(cli),
     'an unreadable page and a page without the table are errors the run reports, not quiet runs');
   ok(/queue\.ok\)[\s\S]{0,200}warn\(/.test(cli), 'and no queue is said rather than hidden');
+  eq([CLI.queueFailureIsNoop(CLI.NO_FIREBASE), CLI.queueFailureIsNoop('permission denied')], [true, false],
+     'missing Firebase credentials are a clean no-op, while a real queue failure stays an error');
+  ok(/if \(!SCAN\) return queueFailureIsNoop\(queue\.error\) \? 0 : 1;/.test(cli),
+     'the crawl exits cleanly only for the documented missing-credential no-op');
   ok(/advertRepeat\(row, duplicateRows\)/.test(cli) && /duplicatesOf\(row, duplicateRows\)/.test(cli) && /nearbyPostings\(row, duplicateRows\)/.test(cli)
      && /_pending: true/.test(cli), 'repeats, duplicates and nearby postings are judged against the site AND the queue, pending rows marked');
   ok(/healCountry\(row, byCountry\)/.test(cli), 'the country the directory knows is filled before the card is drawn');
