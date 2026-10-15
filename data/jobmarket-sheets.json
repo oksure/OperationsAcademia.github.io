@@ -1,12 +1,12 @@
 {
- "generated": "2026-10-15T18:38:21Z",
+ "generated": "2026-10-15T21:46:53Z",
  "current": "1zJPoPCUm11AZ5B74pzmaZKGNSUqU7onIIRQSzIxDkq8",
  "sheets": [
   {
    "id": "1zJPoPCUm11AZ5B74pzmaZKGNSUqU7onIIRQSzIxDkq8",
    "from": "seed",
    "discoveredAt": "",
-   "lastReadAt": "2026-10-15T18:38:21Z",
+   "lastReadAt": "2026-10-15T21:46:53Z",
    "rows": 762,
    "newestPosted": "2026-10-15",
    "tabs": [
@@ -18,7 +18,7 @@
   }
  ],
  "staleness": {
-  "lastCheckedAt": "2026-10-15T18:38:21Z",
+  "lastCheckedAt": "2026-10-15T21:46:53Z",
   "lastWarnedAt": "",
   "lastReason": "",
   "newestPosted": "2026-10-15"
